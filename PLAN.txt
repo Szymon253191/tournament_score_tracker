@@ -1,0 +1,19 @@
+Aplication for running tournaments with brackets.
+
+- schedule games
+- send e-mails to participants
+- storing score and info about games
+- some front-end as desktop app (for now)
+- handle not full bracket
+- order randomized
+- whenever players wants to play
+- database - MS SQL / txt file
+- reports after games / tournament
+- anyone using app can fill in score
+- some texting feature
+
+Big Picture Design:
+Structure: Windows Forms application and Class Library
+Data: SQL / Text File
+Users: One for now
+
