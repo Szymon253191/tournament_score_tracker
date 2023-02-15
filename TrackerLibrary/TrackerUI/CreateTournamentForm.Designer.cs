@@ -119,7 +119,7 @@
             // createNewTeamLink
             // 
             this.createNewTeamLink.AutoSize = true;
-            this.createNewTeamLink.Location = new System.Drawing.Point(295, 277);
+            this.createNewTeamLink.Location = new System.Drawing.Point(295, 286);
             this.createNewTeamLink.Name = "createNewTeamLink";
             this.createNewTeamLink.Size = new System.Drawing.Size(81, 20);
             this.createNewTeamLink.TabIndex = 15;
