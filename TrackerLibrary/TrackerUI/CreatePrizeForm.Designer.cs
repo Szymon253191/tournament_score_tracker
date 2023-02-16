@@ -30,16 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreatePrizeForm));
             this.createPrizeLabel = new System.Windows.Forms.Label();
-            this.placeNumberValue = new System.Windows.Forms.TextBox();
             this.placeNumberLabel = new System.Windows.Forms.Label();
-            this.placeNameValue = new System.Windows.Forms.TextBox();
             this.placeNameLabel = new System.Windows.Forms.Label();
-            this.prizeAmountValue = new System.Windows.Forms.TextBox();
             this.prizeAmountLabel = new System.Windows.Forms.Label();
-            this.prizePercentageValue = new System.Windows.Forms.TextBox();
             this.prizePercentageLabel = new System.Windows.Forms.Label();
             this.orLabel = new System.Windows.Forms.Label();
             this.createPrizeButton = new System.Windows.Forms.Button();
+            this.prizeAmountValue = new System.Windows.Forms.TextBox();
+            this.placeNameValue = new System.Windows.Forms.TextBox();
+            this.placeNumberValue = new System.Windows.Forms.TextBox();
+            this.prizePercentageValue = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // createPrizeLabel
@@ -53,13 +53,6 @@
             this.createPrizeLabel.TabIndex = 11;
             this.createPrizeLabel.Text = "Create Prize";
             // 
-            // placeNumberValue
-            // 
-            this.placeNumberValue.Location = new System.Drawing.Point(238, 112);
-            this.placeNumberValue.Name = "placeNumberValue";
-            this.placeNumberValue.Size = new System.Drawing.Size(165, 35);
-            this.placeNumberValue.TabIndex = 13;
-            // 
             // placeNumberLabel
             // 
             this.placeNumberLabel.AutoSize = true;
@@ -71,13 +64,6 @@
             this.placeNumberLabel.TabIndex = 12;
             this.placeNumberLabel.Text = "Place Number";
             this.placeNumberLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // placeNameValue
-            // 
-            this.placeNameValue.Location = new System.Drawing.Point(238, 184);
-            this.placeNameValue.Name = "placeNameValue";
-            this.placeNameValue.Size = new System.Drawing.Size(165, 35);
-            this.placeNameValue.TabIndex = 15;
             // 
             // placeNameLabel
             // 
@@ -91,13 +77,6 @@
             this.placeNameLabel.Text = "Place Name";
             this.placeNameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // prizeAmountValue
-            // 
-            this.prizeAmountValue.Location = new System.Drawing.Point(238, 256);
-            this.prizeAmountValue.Name = "prizeAmountValue";
-            this.prizeAmountValue.Size = new System.Drawing.Size(165, 35);
-            this.prizeAmountValue.TabIndex = 17;
-            // 
             // prizeAmountLabel
             // 
             this.prizeAmountLabel.AutoSize = true;
@@ -109,14 +88,6 @@
             this.prizeAmountLabel.TabIndex = 16;
             this.prizeAmountLabel.Text = "Prize Amount";
             this.prizeAmountLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // prizePercentageValue
-            // 
-            this.prizePercentageValue.Location = new System.Drawing.Point(238, 379);
-            this.prizePercentageValue.Name = "prizePercentageValue";
-            this.prizePercentageValue.Size = new System.Drawing.Size(165, 35);
-            this.prizePercentageValue.TabIndex = 19;
-            this.prizePercentageValue.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
             // 
             // prizePercentageLabel
             // 
@@ -157,6 +128,37 @@
             this.createPrizeButton.TabIndex = 27;
             this.createPrizeButton.Text = "Create Prize";
             this.createPrizeButton.UseVisualStyleBackColor = false;
+            this.createPrizeButton.Click += new System.EventHandler(this.createPrizeButton_Click);
+            // 
+            // prizeAmountValue
+            // 
+            this.prizeAmountValue.Location = new System.Drawing.Point(238, 256);
+            this.prizeAmountValue.Name = "prizeAmountValue";
+            this.prizeAmountValue.Size = new System.Drawing.Size(165, 35);
+            this.prizeAmountValue.TabIndex = 17;
+            this.prizeAmountValue.Text = "0";
+            // 
+            // placeNameValue
+            // 
+            this.placeNameValue.Location = new System.Drawing.Point(238, 184);
+            this.placeNameValue.Name = "placeNameValue";
+            this.placeNameValue.Size = new System.Drawing.Size(165, 35);
+            this.placeNameValue.TabIndex = 15;
+            // 
+            // placeNumberValue
+            // 
+            this.placeNumberValue.Location = new System.Drawing.Point(238, 112);
+            this.placeNumberValue.Name = "placeNumberValue";
+            this.placeNumberValue.Size = new System.Drawing.Size(165, 35);
+            this.placeNumberValue.TabIndex = 13;
+            // 
+            // prizePercentageValue
+            // 
+            this.prizePercentageValue.Location = new System.Drawing.Point(238, 380);
+            this.prizePercentageValue.Name = "prizePercentageValue";
+            this.prizePercentageValue.Size = new System.Drawing.Size(165, 35);
+            this.prizePercentageValue.TabIndex = 28;
+            this.prizePercentageValue.Text = "0";
             // 
             // CreatePrizeForm
             // 
@@ -164,9 +166,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(460, 548);
+            this.Controls.Add(this.prizePercentageValue);
             this.Controls.Add(this.createPrizeButton);
             this.Controls.Add(this.orLabel);
-            this.Controls.Add(this.prizePercentageValue);
             this.Controls.Add(this.prizePercentageLabel);
             this.Controls.Add(this.prizeAmountValue);
             this.Controls.Add(this.prizeAmountLabel);
@@ -188,15 +190,15 @@
         #endregion
 
         private System.Windows.Forms.Label createPrizeLabel;
-        private System.Windows.Forms.TextBox placeNumberValue;
         private System.Windows.Forms.Label placeNumberLabel;
-        private System.Windows.Forms.TextBox placeNameValue;
         private System.Windows.Forms.Label placeNameLabel;
-        private System.Windows.Forms.TextBox prizeAmountValue;
         private System.Windows.Forms.Label prizeAmountLabel;
-        private System.Windows.Forms.TextBox prizePercentageValue;
         private System.Windows.Forms.Label prizePercentageLabel;
         private System.Windows.Forms.Label orLabel;
         private System.Windows.Forms.Button createPrizeButton;
+        private System.Windows.Forms.TextBox prizeAmountValue;
+        private System.Windows.Forms.TextBox placeNameValue;
+        private System.Windows.Forms.TextBox placeNumberValue;
+        private System.Windows.Forms.TextBox prizePercentageValue;
     }
 }

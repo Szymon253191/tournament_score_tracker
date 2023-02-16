@@ -1,0 +1,6 @@
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\bin\Debug\TrackerLibrary.dll
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\bin\Debug\TrackerLibrary.pdb
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\obj\Debug\TrackerLibrary.csproj.AssemblyReference.cache
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\obj\Debug\TrackerLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\obj\Debug\TrackerLibrary.dll
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerLibrary\obj\Debug\TrackerLibrary.pdb

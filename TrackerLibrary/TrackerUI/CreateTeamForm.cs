@@ -21,5 +21,10 @@ namespace TrackerUI
         {
 
         }
+
+        private void teamMembersListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
