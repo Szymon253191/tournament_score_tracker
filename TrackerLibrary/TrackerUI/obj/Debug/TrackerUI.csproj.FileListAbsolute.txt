@@ -16,3 +16,5 @@ C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\ob
 C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\bin\Debug\TrackerLibrary.dll
 C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\bin\Debug\TrackerLibrary.pdb
 C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\obj\Debug\TrackerUI.csproj.CopyComplete
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\bin\Debug\Dapper.dll
+C:\Users\Szymon\GitProjects\tournament_score_tracker\TrackerLibrary\TrackerUI\bin\Debug\Dapper.xml
