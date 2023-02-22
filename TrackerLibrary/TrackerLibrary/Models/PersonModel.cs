@@ -28,5 +28,13 @@ namespace TrackerLibrary.Model
         /// Represents phone number of player.
         /// </summary>
         public string PhoneNumber { get; set; }
+
+        public string FullName
+        { 
+            get
+            {
+                return $"{FirstName} {LastName}";
+            }
+        }
     }
 }
