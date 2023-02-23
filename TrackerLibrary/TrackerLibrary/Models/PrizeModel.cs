@@ -33,6 +33,14 @@ namespace TrackerLibrary.Model
         /// </summary>
         public double PrizePercentage { get; set; }
 
+        public string PrizePlaceAndNumber
+        {
+            get
+            {
+                return $"{PlaceNumber} - {PlaceName}";
+            }
+        }
+
         public PrizeModel()
         {
 
