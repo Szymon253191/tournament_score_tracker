@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary.Model
 {
+    /// <summary>
+    /// Represents one tournament.
+    /// </summary>
     public class TournamentModel
     {
+        /// <summary>
+        /// The unique identifier for the tournament.
+        /// </summary>
+        public int Id { get; set; }
         /// <summary>
         /// Represents given name of tournament.
         /// </summary>

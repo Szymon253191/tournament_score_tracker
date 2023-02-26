@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary.Model
 {
+    /// <summary>
+    /// Represents one person.
+    /// </summary>
     public class PersonModel
     {
         /// <summary>
-        /// The unique identifier for the prize.
+        /// The unique identifier for the person.
         /// </summary>
         public int Id { get; set; }
         /// <summary>

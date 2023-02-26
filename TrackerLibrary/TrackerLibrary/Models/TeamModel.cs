@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TrackerLibrary.Model
 {
+    /// <summary>
+    /// Represents one team.
+    /// </summary>
     public class TeamModel
     {
         /// <summary>
