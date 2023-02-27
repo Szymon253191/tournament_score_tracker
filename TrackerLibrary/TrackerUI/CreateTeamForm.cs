@@ -25,6 +25,8 @@ namespace TrackerUI
             InitializeComponent();
 
             callingForm = caller;
+
+            WireUpList();
         }
 
         public CreateTeamForm()
@@ -46,7 +48,6 @@ namespace TrackerUI
         }
         private void WireUpList()
         {
-            // TODO - Find better way to refresh dropbox / listbox
             selectTeamMemberDropBox.DataSource = null;
 
             selectTeamMemberDropBox.DataSource = availableTeamMembers;
@@ -57,6 +58,7 @@ namespace TrackerUI
             teamMembersListBox.DataSource = selectedTeamMembers;
             teamMembersListBox.DisplayMember = "FullName";
 
+            selectTeamMemberDropBox.Refresh();
         }
 
         private void createMemberButton_Click(object sender, EventArgs e)

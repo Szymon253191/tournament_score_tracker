@@ -15,6 +15,8 @@ namespace TrackerLibrary.DataAccess
         private const string PeopleFile = "PersonModels.csv";
         private const string TeamFile = "TeamModels.csv";
         private const string TournamentFile = "TournamentModel.csv";
+        private const string MatchupFile = "MatchupModels.csv";
+        private const string MatchupEntriesFile = "MatchupEntryModels.csv";
         public PersonModel CreatePerson(PersonModel model)
         {
             List<PersonModel> people = PeopleFile.FullFilePath().LoadFile().ConvertToPersonModels();
@@ -35,7 +37,6 @@ namespace TrackerLibrary.DataAccess
             return model;
         }
 
-        /// TODO - Make the CreatePrize method to do what it should actually.
         /// <summary>
         /// Saves a new prize to the database
         /// </summary>
@@ -101,6 +102,8 @@ namespace TrackerLibrary.DataAccess
             }
 
             model.Id = currentId;
+
+            model.SaveRoundsToFile(MatchupFile, MatchupEntriesFile);
 
             tournaments.Add(model);
 
