@@ -31,5 +31,35 @@ namespace TrackerLibrary.Model
         /// Represents number of round in witch match was taking place.
         /// </summary>
         public int MatchupRound { get; set; }
+
+        public string DisplayName 
+        { 
+            get
+            {
+                string output = string.Empty;
+
+                foreach (MatchupEntryModel me in Entries)
+                {
+                    if (me.TeamCompeting != null)
+                    {
+                        if (output.Length == 0)
+                        {
+                            output = me.TeamCompeting.TeamName;
+                        }
+                        else
+                        {
+                            output += $" vs. {me.TeamCompeting.TeamName}";
+                        } 
+                    }
+                    else
+                    {
+                        output = "Matchup not yet determined";
+                        break;
+                    }
+                }
+
+                return output;
+            }
+        }
     }
 }
