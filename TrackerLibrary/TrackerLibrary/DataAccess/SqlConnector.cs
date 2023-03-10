@@ -21,7 +21,7 @@ namespace TrackerLibrary.DataAccess
     public class SqlConnector : IDataConnection
     {
         private const string db = "Tournaments";
-        public PersonModel CreatePerson(PersonModel model)
+        public void CreatePerson(PersonModel model)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
@@ -35,8 +35,6 @@ namespace TrackerLibrary.DataAccess
                 connection.Execute("dbo.spPeople_Insert", p, commandType: CommandType.StoredProcedure);
 
                 model.Id = p.Get<int>("@id");
-
-                return model;
             }
         }
 
@@ -45,7 +43,7 @@ namespace TrackerLibrary.DataAccess
         /// </summary>
         /// <param name="model">The prize information.</param>
         /// <returns>The prize information, including the unique identifier.</returns>
-        public PrizeModel CreatePrize(PrizeModel model)
+        public void CreatePrize(PrizeModel model)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
@@ -59,12 +57,10 @@ namespace TrackerLibrary.DataAccess
                 connection.Execute("dbo.spPrizes_Insert", p, commandType: CommandType.StoredProcedure);
 
                 model.Id = p.Get<int>("@id");
-
-                return model;
             }
         }
 
-        public TeamModel CreateTeam(TeamModel model)
+        public void CreateTeam(TeamModel model)
         {
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
@@ -85,8 +81,6 @@ namespace TrackerLibrary.DataAccess
 
                     connection.Execute("dbo.spTeamMembers_Insert", p, commandType: CommandType.StoredProcedure);
                 }
-
-                return model;
             }
         }
 
@@ -101,6 +95,8 @@ namespace TrackerLibrary.DataAccess
                 SaveTournamentEntries(connection, model);
 
                 SaveTournamentRounds(connection, model);
+
+                TournamentLogic.UpdateTournamentResults(model);
             }
         }
 
@@ -318,19 +314,25 @@ namespace TrackerLibrary.DataAccess
             using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(GlobalConfig.CnnString(db)))
             {
                 var p = new DynamicParameters();
-                p.Add("@id", model.Id);
-                p.Add("@winnerId", model.Winner.Id);
+                if (model.Winner != null)
+                {
+                    p.Add("@id", model.Id);
+                    p.Add("@winnerId", model.Winner.Id);
 
-                connection.Execute("dbo.spMatchups_Update", p, commandType: CommandType.StoredProcedure);
+                    connection.Execute("dbo.spMatchups_Update", p, commandType: CommandType.StoredProcedure);
+                }
 
                 foreach (MatchupEntryModel me in model.Entries)
                 {
-                    p = new DynamicParameters();
-                    p.Add("@id", me.Id);
-                    p.Add("@teamCompetingId", me.TeamCompeting.Id);
-                    p.Add("@Score", me.Score);
+                    if (me.TeamCompeting != null)
+                    {
+                        p = new DynamicParameters();
+                        p.Add("@id", me.Id);
+                        p.Add("@teamCompetingId", me.TeamCompeting.Id);
+                        p.Add("@Score", me.Score);
 
-                    connection.Execute("dbo.MatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
+                        connection.Execute("dbo.MatchupEntries_Update", p, commandType: CommandType.StoredProcedure); 
+                    }
                 }
             }
         }
