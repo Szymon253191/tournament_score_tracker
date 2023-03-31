@@ -15,10 +15,9 @@ namespace TrackerUI
 {
     public partial class CreateTeamForm : Form
     {
-        private List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
-        private List<PersonModel> selectedTeamMembers = new List<PersonModel>();
-
-        ITeamRequester callingForm;
+        private readonly List<PersonModel> availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
+        private readonly List<PersonModel> selectedTeamMembers = new List<PersonModel>();
+		readonly ITeamRequester callingForm;
 
         public CreateTeamForm(ITeamRequester caller)
         {
@@ -46,6 +45,7 @@ namespace TrackerUI
             selectedTeamMembers.Add(new PersonModel { FirstName = "Marcin", LastName = "Bogdanski" });
 
         }
+
         private void WireUpList()
         {
             selectTeamMemberDropBox.DataSource = null;
@@ -65,14 +65,15 @@ namespace TrackerUI
         {
             if (ValidateForm())
             {
-                PersonModel p = new PersonModel();
+				PersonModel p = new PersonModel
+				{
+					FirstName = firstNameValue.Text,
+					LastName = lastNameValue.Text,
+					EmailAddress = emailValue.Text,
+					PhoneNumber = phoneNumberValue.Text
+				};
 
-                p.FirstName = firstNameValue.Text; 
-                p.LastName = lastNameValue.Text;
-                p.EmailAddress = emailValue.Text;
-                p.PhoneNumber = phoneNumberValue.Text;
-
-                GlobalConfig.Connection.CreatePerson(p);
+				GlobalConfig.Connection.CreatePerson(p);
 
                 selectedTeamMembers.Add(p);
 
@@ -138,12 +139,13 @@ namespace TrackerUI
 
         private void createTeamButton_Click(object sender, EventArgs e)
         {
-            TeamModel t = new TeamModel();
+			TeamModel t = new TeamModel
+			{
+				TeamName = teamNameValue.Text,
+				TeamMembers = selectedTeamMembers
+			};
 
-            t.TeamName = teamNameValue.Text;
-            t.TeamMembers = selectedTeamMembers;
-
-            GlobalConfig.Connection.CreateTeam(t);
+			GlobalConfig.Connection.CreateTeam(t);
 
             callingForm.TeamComplete(t);
 

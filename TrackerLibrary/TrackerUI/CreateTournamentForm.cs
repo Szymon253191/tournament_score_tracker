@@ -14,9 +14,9 @@ namespace TrackerUI
 {
     public partial class CreateTournamentForm : Form, IPrizeRequester, ITeamRequester
     {
-        List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();
-        List<TeamModel> selectedTeams = new List<TeamModel>();
-        List<PrizeModel> selectedPrizes = new List<PrizeModel>();
+		readonly List<TeamModel> availableTeams = GlobalConfig.Connection.GetTeam_All();
+		readonly List<TeamModel> selectedTeams = new List<TeamModel>();
+		readonly List<PrizeModel> selectedPrizes = new List<PrizeModel>();
         
         public CreateTournamentForm()
         {
@@ -124,17 +124,18 @@ namespace TrackerUI
                 return;
             }
 
-            // create tournament model
-            TournamentModel tm = new TournamentModel();
+			// create tournament model
+			TournamentModel tm = new TournamentModel
+			{
+				TournamentName = tournamentNameValue.Text,
+				EntryFee = fee,
 
-            tm.TournamentName = tournamentNameValue.Text;
-            tm.EntryFee = fee;
+				Prizes = selectedPrizes,
+				EnteredTeams = selectedTeams
+			};
 
-            tm.Prizes = selectedPrizes;
-            tm.EnteredTeams = selectedTeams;
-
-            // Wire matchups
-            TournamentLogic.CreateRounds(tm);
+			// Wire matchups
+			TournamentLogic.CreateRounds(tm);
 
             // create tournaments entry
             // create all of the prizes entries

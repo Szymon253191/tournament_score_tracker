@@ -14,9 +14,9 @@ namespace TrackerUI
 {
 	public partial class TournamentViewerForm : Form
 	{
-		private TournamentModel tournament;
-		BindingList<int> rounds = new BindingList<int>();
-		BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();
+		private readonly TournamentModel tournament;
+		readonly BindingList<int> rounds = new BindingList<int>();
+		readonly BindingList<MatchupModel> selectedMatchups = new BindingList<MatchupModel>();
 
 		public TournamentViewerForm(TournamentModel tournamentModel)
 		{
@@ -194,7 +194,9 @@ namespace TrackerUI
 				MessageBox.Show($"Input error: { errorMessage }");
 				return;
 			}
+
 			MatchupModel m = (MatchupModel)matchupListBox.SelectedItem;
+
 			double teamOneScore = 0;
 			double teamTwoScore = 0;
 
@@ -242,8 +244,8 @@ namespace TrackerUI
 			}
 			catch (Exception ex)
 			{
-
 				MessageBox.Show($"The application had the following error: { ex.Message }");
+				return;
 			}
 
 			LoadMatchups((int)roundDropBox.SelectedItem);
