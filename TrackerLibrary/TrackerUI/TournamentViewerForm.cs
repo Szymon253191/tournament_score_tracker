@@ -28,8 +28,6 @@ namespace TrackerUI
 
 			LoadFormData();
 
-			PdfCreator.Generate(tournament.TournamentName, tournament);
-
 			LoadRounds();
 		}
 
@@ -93,6 +91,7 @@ namespace TrackerUI
 			}
 
 			DisplayMatchupInfo();
+
 		}
 
 		private void DisplayMatchupInfo()
@@ -252,5 +251,15 @@ namespace TrackerUI
 
 			LoadMatchups((int)roundDropBox.SelectedItem);
 		}
-	}
+
+        private void TournamentViewerForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PdfCreate_Click(object sender, EventArgs e)
+        {
+			PdfCreator.TEST(tournament.TournamentName, tournament);
+        }
+    }
 }

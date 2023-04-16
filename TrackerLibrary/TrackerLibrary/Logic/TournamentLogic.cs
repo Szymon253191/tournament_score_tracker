@@ -54,8 +54,8 @@ namespace TrackerLibrary
 
             if (endingRound > startingRound)
             {
+                // TODO in last match winner should be announced and tournament should end (delete?)
                 model.AlertUsersToNewRound();
-
             }
         }
 

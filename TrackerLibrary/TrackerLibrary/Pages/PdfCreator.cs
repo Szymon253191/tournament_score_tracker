@@ -11,80 +11,19 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using TrackerLibrary.Model;
+using iText.Layout.Renderer;
+using iText.IO.Util;
+using Dapper;
 
 namespace TrackerLibrary
 {
+    //TODO Make PDFCreator make bracket connection (lines)
     public static class PdfCreator
     {
-        public static void Generate(string filename, TournamentModel tournament)
-        {
-            string pfdName = @"..\..\..\..\PDFs\" + filename + ".pdf";
-            string directoryPath = System.IO.Path.GetDirectoryName(pfdName);
-
-            IfDirExists(directoryPath);
-
-            PdfWriter writer = new PdfWriter(pfdName);
-            PdfDocument pdfDoc = new PdfDocument(writer);
-            pdfDoc.SetDefaultPageSize(PageSize.LETTER.Rotate());
-            Document document = new Document(pdfDoc);
-
-            float xMargin = 50f;
-            float yMargin = 50f;
-            float xSpacing = 50f;
-            float ySpacing = 20f;
-            float lineWidth = 2f;
-
-            Style titleStyle = new Style()
-                .SetFontSize(20f).SetFontColor(ColorConstants.BLACK)
-                .SetTextAlignment(TextAlignment.CENTER).SetBold();
-            Style teamStyle = new Style()
-                .SetFontSize(12f).SetFontColor(ColorConstants.BLACK);
-            Paragraph title = new Paragraph("Tournament Bracket").AddStyle(titleStyle);
-            document.Add(title);
-
-            document.Add(new Paragraph(" ------------------ "));
-
-
-            List<MatchupModel> round = tournament.Rounds[0];
-
-            foreach (MatchupModel matchup in round)
-            {
-                if (matchup.Entries[0].TeamCompeting.TeamName == null)
-                {
-                    string nameOne = "---";
-                    document.Add(new Paragraph(nameOne));
-                }
-                else
-                {
-                    string nameOne = matchup.Entries[0].TeamCompeting.TeamName;
-                    document.Add(new Paragraph(nameOne));
-                }
-                if (matchup.Entries.Count == 1)
-                {
-                    document.Add(new Paragraph(" - BYE - "));
-                    document.Add(new Paragraph(" ------------------ "));
-                    continue;
-                }
-                if (matchup.Entries[1].TeamCompeting.TeamName == null)
-                {
-                    string nameTwo = "---";
-                    document.Add(new Paragraph(nameTwo));
-                }
-                else
-                {
-                    string nameTwo = matchup.Entries[1].TeamCompeting.TeamName;
-                    document.Add(new Paragraph(nameTwo));
-                }
-
-                document.Add(new Paragraph(" ------------------ "));
-            }
-
-            document.Close();
-        }
-
         private static void IfDirExists(string dir)
         {
             if (!Directory.Exists(dir))
@@ -93,7 +32,7 @@ namespace TrackerLibrary
             }
         }
 
-        public static void GenerateTEST(string filename, TournamentModel tournament)
+        public static void TEST(string filename, TournamentModel tournament)
         {
             string pfdName = @"..\..\..\..\PDFs\" + filename + ".pdf";
             string directoryPath = System.IO.Path.GetDirectoryName(pfdName);
@@ -102,39 +41,126 @@ namespace TrackerLibrary
 
             PdfWriter writer = new PdfWriter(pfdName);
             PdfDocument pdfDoc = new PdfDocument(writer);
-            pdfDoc.SetDefaultPageSize(PageSize.LETTER.Rotate());
+            pdfDoc.SetDefaultPageSize(PageSize.A4.Rotate());
             Document document = new Document(pdfDoc);
 
-            float bracketWidth = 300f;
-            float bracketHeight = 20f;
-            float teamNameFontSize = 12f;
-            float lineThickness = 1f;
+            Style titleStyle = new Style()
+                .SetFontSize(20f).SetFontColor(ColorConstants.BLACK)
+                .SetTextAlignment(TextAlignment.CENTER).SetBold();
+            Style teamStyle = new Style()
+                .SetFontSize(12f).SetFontColor(ColorConstants.BLACK);
+            Paragraph title = new Paragraph($"Tournament: {tournament.TournamentName} - Bracket").AddStyle(titleStyle);
+            document.Add(title);
 
-            Table table = new Table(new float[] { bracketWidth / 2, bracketWidth / 2 });
+            List<List<MatchupModel>> rounds = tournament.Rounds;
 
-            foreach (MatchupModel round in tournament.Rounds[0])
+            float rectangleWidth = 100f;
+            float rectangleHeight = 20f;
+            float rectangleX = 50f;
+            float rectangleY = 500f;
+            float rectangleYOrgin = rectangleY;
+
+            PdfCanvas canvas = new PdfCanvas(pdfDoc.GetFirstPage());
+            canvas.SetStrokeColor(ColorConstants.BLACK)
+                .SetLineWidth(1);
+
+            int roundNum = 1;
+            foreach (List<MatchupModel> round in rounds)
             {
-                table.AddCell(new Cell().Add(new Paragraph(round.Entries[0].TeamCompeting.TeamName).SetFontSize(teamNameFontSize)));
-                if (round.Entries.Count < 2)
+                foreach (MatchupModel matchup in round)
                 {
-                    table.AddCell(new Cell().Add(new Paragraph(" EMPTY ").SetFontSize(teamNameFontSize)));
-                }
-                else
-                {
-                    table.AddCell(new Cell().Add(new Paragraph(round.Entries[1].TeamCompeting.TeamName).SetFontSize(teamNameFontSize)));
+                    if (matchup.MatchupRound != roundNum)
+                    {
+                        rectangleY = ((rectangleYOrgin + rectangleY) / 2) + (round.Count * rectangleHeight);
+                        //rectangleY = (rectangleYOrgin + rectangleY) / 2 + (rounds.Count - roundNum) * rectangleHeight;
+                        roundNum++;
+                        rectangleYOrgin = rectangleY;
+                    }
+                    canvas.Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight)
+                        .Stroke();
+                    canvas.Rectangle(rectangleX + rectangleWidth, rectangleY, rectangleHeight, rectangleHeight)
+                        .Stroke();
+
+                    string text = matchup.DisplayName;
+
+                    string teamOne = "";
+                    string teamTwo = "";
+
+                    string scoreOne = "";
+                    string scoreTwo = "";
+
+                    if (text.Contains("vs."))
+                    {
+                        int vsIndex = text.IndexOf("vs.");
+                        if (vsIndex >= 0)
+                        {
+                            teamOne = text.Substring(0, vsIndex).Trim();
+                            teamTwo = text.Substring(vsIndex + 3).Trim();
+                            scoreOne = matchup.Entries[0].Score.ToString();
+                            scoreTwo = matchup.Entries[1].Score.ToString();
+                        }
+                    }
+                    else
+                    {
+                        teamOne = text;
+                        teamTwo = "<BYE>";
+                    }
+                    if (text == "Matchup not yet determined")
+                    {
+                        teamOne = "";
+                        teamTwo = "";
+                    }
+
+                    Paragraph teamName = new Paragraph(teamOne)
+                        .SetFontSize(12)
+                        .SetFontColor(ColorConstants.BLACK);
+                    teamName.SetFixedPosition(rectangleX + 2f, rectangleY + 2f, rectangleWidth - 2f);
+                    document.Add(teamName);
+
+                    Paragraph scoreValue = new Paragraph(scoreOne)
+                        .SetFontSize(12)
+                        .SetFontColor(ColorConstants.BLACK);
+                    scoreValue.SetFixedPosition(rectangleX + rectangleWidth + 5f, rectangleY + 2f, rectangleWidth - 2f);
+                    document.Add(scoreValue);
+
+                    rectangleY -= 25f;
+
+                    canvas.Rectangle(rectangleX, rectangleY, rectangleWidth, rectangleHeight)
+                        .Stroke();
+                    canvas.Rectangle(rectangleX + rectangleWidth, rectangleY, rectangleHeight, rectangleHeight)
+                        .Stroke();
+
+                    teamName = new Paragraph(teamTwo)
+                        .SetFontSize(12)
+                        .SetFontColor(ColorConstants.BLACK);
+                    teamName.SetFixedPosition(rectangleX + 2f, rectangleY + 2f, rectangleWidth - 2f);
+                    document.Add(teamName);
+
+                    scoreValue = new Paragraph(scoreTwo)
+                        .SetFontSize(12)
+                        .SetFontColor(ColorConstants.BLACK);
+                    scoreValue.SetFixedPosition(rectangleX + rectangleWidth + 5f, rectangleY + 2f, rectangleWidth - 2f);
+                    document.Add(scoreValue);
+
+                    rectangleY -= 40f;
                 }
 
-                table.AddCell(new Cell().Add(new LineSeparator(new SolidLine(lineThickness))));
+                rectangleY += 40f;
+                rectangleX += 150f;
             }
-            document.Add(table);
 
+            // NUMBERS FOR LOOPS
 
+            // ROUND NUMBER: 1,2,3
+            // matchup.MatchupRound;
 
+            // NUMBER OF TEAMS IN MATCHUP: 2 if normal, 1 if bye
+            // matchup.Entries.Count;
+
+            // NUMBER OF TEAMS IN ROUND: 4 in first, 2 in second, 1 in third
+            // round.Count;
 
             document.Close();
-
-            //document.Add(new Paragraph(round.Count.ToString()));
         }
-
     }
 }
