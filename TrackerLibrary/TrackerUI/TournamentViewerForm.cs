@@ -28,6 +28,8 @@ namespace TrackerUI
 
 			LoadFormData();
 
+			PdfCreator.Generate(tournament.TournamentName, tournament);
+
 			LoadRounds();
 		}
 

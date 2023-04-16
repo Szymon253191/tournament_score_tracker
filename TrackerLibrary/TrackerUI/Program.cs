@@ -9,9 +9,6 @@ namespace TrackerUI
 {
     internal static class Program
     {
-        /// <summary>
-        /// Główny punkt wejścia dla aplikacji.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -22,8 +19,6 @@ namespace TrackerUI
             TrackerLibrary.GlobalConfig.InitializeConnections(DatabaseType.Sql);
 
             Application.Run(new TournamentDashboardForm());
-
-            //Application.Run(new TournamentDashboardForm());
         }
     }
 }

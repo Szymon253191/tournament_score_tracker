@@ -28,7 +28,7 @@ namespace TrackerLibrary.Model
         /// </summary>
         public TeamModel Winner { get; set; }
         /// <summary>
-        /// Represents number of round in witch match was taking place.
+        /// Represents number of round in which match was taking place.
         /// </summary>
         public int MatchupRound { get; set; }
 
