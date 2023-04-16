@@ -43,6 +43,7 @@
             this.teamOneName = new System.Windows.Forms.Label();
             this.tournamentName = new System.Windows.Forms.Label();
             this.teamTwoName = new System.Windows.Forms.Label();
+            this.PdfCreate = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // roundDropBox
@@ -202,12 +203,30 @@
             this.teamTwoName.Text = "<team two>";
             this.teamTwoName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // PdfCreate
+            // 
+            this.PdfCreate.BackColor = System.Drawing.Color.Transparent;
+            this.PdfCreate.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.PdfCreate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.PdfCreate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightBlue;
+            this.PdfCreate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.PdfCreate.Font = new System.Drawing.Font("Segoe UI Semibold", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.PdfCreate.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.PdfCreate.Location = new System.Drawing.Point(638, 119);
+            this.PdfCreate.Name = "PdfCreate";
+            this.PdfCreate.Size = new System.Drawing.Size(137, 48);
+            this.PdfCreate.TabIndex = 14;
+            this.PdfCreate.Text = "Save PDF";
+            this.PdfCreate.UseVisualStyleBackColor = false;
+            this.PdfCreate.Click += new System.EventHandler(this.PdfCreate_Click);
+            // 
             // TournamentViewerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(801, 537);
+            this.Controls.Add(this.PdfCreate);
             this.Controls.Add(this.scoreButton);
             this.Controls.Add(this.vsLabel);
             this.Controls.Add(this.teamTwoScoreValue);
@@ -227,6 +246,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "TournamentViewerForm";
             this.Text = "Tournament Viewer";
+            this.Load += new System.EventHandler(this.TournamentViewerForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,6 +267,7 @@
         private System.Windows.Forms.Label teamOneName;
         private System.Windows.Forms.Label tournamentName;
         private System.Windows.Forms.Label teamTwoName;
+        private System.Windows.Forms.Button PdfCreate;
     }
 }
 
