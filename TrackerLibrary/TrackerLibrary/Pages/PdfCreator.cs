@@ -32,7 +32,7 @@ namespace TrackerLibrary
             }
         }
 
-        public static void TEST(string filename, TournamentModel tournament)
+        public static void CreateBrackets(string filename, TournamentModel tournament)
         {
             string pfdName = @"..\..\..\..\PDFs\" + filename + ".pdf";
             string directoryPath = System.IO.Path.GetDirectoryName(pfdName);

@@ -115,7 +115,17 @@ namespace TrackerLibrary.DataAccess
             return TeamFile.FullFilePath().LoadFile().ConvertToTeamModels(PeopleFile);
         }
 
+        public List<TournamentModel> GetTournament_Active()
+        {
+            throw new NotImplementedException();
+        }
+
         public List<TournamentModel> GetTournament_All()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTournamentInavtive(TournamentModel model)
         {
             throw new NotImplementedException();
         }

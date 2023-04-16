@@ -259,7 +259,7 @@ namespace TrackerUI
 
         private void PdfCreate_Click(object sender, EventArgs e)
         {
-			PdfCreator.TEST(tournament.TournamentName, tournament);
+            PdfCreator.CreateBrackets(tournament.TournamentName, tournament);
         }
     }
 }

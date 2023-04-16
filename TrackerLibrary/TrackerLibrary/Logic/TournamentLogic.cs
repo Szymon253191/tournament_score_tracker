@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iText.Layout.Splitting;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using TrackerLibrary.DataAccess;
 using TrackerLibrary.Model;
 
 namespace TrackerLibrary
@@ -50,12 +52,77 @@ namespace TrackerLibrary
             AdvanceWinners(toScore, model);
 
             toScore.ForEach(x => GlobalConfig.Connection.UpdateMatchup(x));
+
             int endingRound = model.CheckCurrentRound();
+
+            if (CheckIfTournamendEnded(model))
+            {
+                AlertUsersToWinner(model);
+                PdfCreator.CreateBrackets($"{ model.TournamentName }_RESULTS", model);
+                IDataConnection connection = GlobalConfig.Connection;
+                connection.SetTournamentInavtive(model);
+                throw new Exception("Winner is drafted!");
+            }
 
             if (endingRound > startingRound)
             {
                 // TODO in last match winner should be announced and tournament should end (delete?)
                 model.AlertUsersToNewRound();
+            }
+        }
+
+        private static bool CheckIfTournamendEnded(TournamentModel tournament)
+        {
+            bool isEnd = true;
+            string winner = string.Empty;
+            foreach (List<MatchupModel> round in tournament.Rounds)
+            {
+                foreach (MatchupModel rm in round)
+                {
+                    if (rm.Winner == null) { isEnd = false; return isEnd; }
+                    winner = rm.Winner.TeamName;
+                }
+            }
+
+            if (isEnd)
+            { 
+                Console.WriteLine($"End of tournament. Winner: { winner }");
+            }
+
+            return isEnd;
+        }
+
+        private static string CheckWinnerName(TournamentModel tournament)
+        {
+            string winner = string.Empty;
+            List<MatchupModel> round = tournament.Rounds[tournament.Rounds.Count - 1];
+
+            foreach (MatchupModel rm in round)
+            {
+                if (rm.Winner != null) { winner = rm.Winner.TeamName; }
+            }
+            
+            return winner;
+        }
+
+        public static void AlertUsersToWinner(this TournamentModel model)
+        {
+            List<List<MatchupModel>> rounds = model.Rounds;
+
+            string winner = CheckWinnerName(model);
+
+            foreach (List<MatchupModel> round in rounds)
+            {
+                foreach (MatchupModel matchup in round)
+                {
+                    foreach (MatchupEntryModel me in matchup.Entries)
+                    {
+                        foreach (PersonModel p in me.TeamCompeting.TeamMembers)
+                        {
+                            AlertPersonAboutWinner(p, winner, matchup.Entries.Where(x => x.TeamCompeting != me.TeamCompeting).FirstOrDefault());
+                        }
+                    }
+                } 
             }
         }
 
@@ -68,13 +135,39 @@ namespace TrackerLibrary
             {
                 foreach (MatchupEntryModel me in matchup.Entries)
                 {
-                    foreach (PersonModel p in me.TeamCompeting.TeamMembers)
+                    if (me.TeamCompeting != null)
                     {
-                        AlertPersonToNewRound(p, me.TeamCompeting.TeamName, matchup.Entries.Where(x => x.TeamCompeting != me.TeamCompeting).FirstOrDefault());
+                        foreach (PersonModel p in me.TeamCompeting.TeamMembers)
+                        {
+                            AlertPersonToNewRound(p, me.TeamCompeting.TeamName, matchup.Entries.Where(x => x.TeamCompeting != me.TeamCompeting).FirstOrDefault());
+                        }
                     }
                 }
             }
 
+        }
+
+        private static void AlertPersonAboutWinner(PersonModel p, string winner, MatchupEntryModel competitor)
+        {
+            if (p.EmailAddress.Length == 0)
+            {
+                return;
+            }
+
+            string to = "";
+            string subject = "";
+            StringBuilder body = new StringBuilder();
+
+            subject = "Tournament has ended!";
+
+            body.AppendLine($"<h1>The winner is: { winner }!</h1><br>");
+            body.AppendLine("Thank you for your participation!<br>");
+            body.AppendLine("<br>");
+            body.AppendLine("~Tournament Score Tracker");
+
+            to = p.EmailAddress;
+
+            EmailLogic.SendEmail(to, subject, body.ToString());
         }
 
         private static void AlertPersonToNewRound(PersonModel p, string teamName, MatchupEntryModel competitor)
