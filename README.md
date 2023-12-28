@@ -1,4 +1,3 @@
-
 # Tournament Score Tracker
 
 ## Written in C#/.NET program designed to help you run tournaments.
